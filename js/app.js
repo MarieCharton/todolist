@@ -72,7 +72,6 @@ const app = {
   app.todo.appendChild(form);
 
   },
-
   //Mettre a jour le DOM avec la valeur du compteur 
   updateCounter: function(){
     const counter = document.getElementById ("todo-counter");
@@ -119,6 +118,20 @@ const app = {
     const checkbox = document.createElement ("input");
     checkbox.type = "checkbox";
     checkbox.checked = data.done;
+
+    //ON écoute le changement sur les checkbox
+    checkbox.addEventListener ("change",function (){
+      //Changer la classe (toggle)
+      task.classList.toggle("task-label--done");
+
+      //Baisser le compteur
+      if (checkbox.checked){
+        app.count--;
+      } else { app.count++;
+      }
+      // On met a jour le compteur 
+      app.updateCounter();
+    })
 
     //Ajout du label span
     const label = document.createElement("span");
