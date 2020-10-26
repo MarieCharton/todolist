@@ -2,6 +2,11 @@
  * Todolist
  */
 const app = {
+
+  //Je stocke le compteur ici : 
+  count:0, // on part de zéro
+
+
   init: function() {
 
     //Target du DOM 
@@ -22,7 +27,14 @@ const app = {
     evt.preventDefault();
 
     //Récupération de la valeur du champ
-    const value = evt.target.elements.inputValue.value;
+
+    //Solution 1
+    // const value = evt.target.elements.inputValue.value;
+
+    // Solution2
+    const formInput = document.querySelector("#todo-input");
+    const value = formInput.value;
+
     //Ajout de la valeur du champ a la liste
     app.generateTask({
       label : value,
@@ -31,8 +43,11 @@ const app = {
 
     //On vide le champ
     evt.target.elements.inputValue.value = "";
-  },
 
+    //Ajouter 1 au compteur 
+    app.count++;
+    app.updateCounter();
+  },
   createFrom: function(){
     console.log ("app :createForm");
 
@@ -57,6 +72,12 @@ const app = {
   app.todo.appendChild(form);
 
   },
+
+  //Mettre a jour le DOM avec la valeur du compteur 
+  updateCounter: function(){
+    const counter = document.getElementById ("todo-counter");
+    counter.textContent = `${app.count} tâches en cours`;
+  },
   createCounter: function(){
     console.log ("app :createCounter");
 
@@ -64,7 +85,7 @@ const app = {
     const counter = document.createElement ("div");
     counter.id = "todo-counter";
     //Préparer le contenu 
-    counter.textContent = "2 tâches en cours";
+    counter.textContent = `${app.count} tâches en cours`;
 
     //Ajout du compteur au DOM
     app.todo.appendChild ( counter);
@@ -80,15 +101,7 @@ const app = {
     //Je stocke dans app pour y accèder partout
     app.list = list;
 
-    // Creation des tâches 
-    app.generateTask({
-      label: "coder une ToDoList en JS",
-      done: true,
-    });
-    app.generateTask({
-      label: "Faire les courses",
-      done: true,
-    });
+
   
     // Ajout dans le DOM
     app.todo.appendChild (list);
