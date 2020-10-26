@@ -1,67 +1,134 @@
 /**
  * Todolist
  */
-var app = {
+const app = {
   init: function() {
 
-  // je recupere l'endroit du DOM ou je veux creer mon input 
-  container = document.getElementById("todo"); 
+    //Target du DOM 
+    app.todo = document.getElementById("todo"); 
+    
+    //La génération du form
+    app.createFrom();
+    //La génération du counter
+    app.createCounter();
+    //La génération de la liste 
+    app.createList();
 
-  //Le input
- //on crée l'élément (la balise) input
-  input = document.createElement("input");
-  
-  //J'ajoute le placeholder
+    
+  },
+
+
+  addTask: function(evt){
+    evt.preventDefault();
+
+    //Récupération de la valeur du champ
+    const value = evt.target.elements.inputValue.value;
+    //Ajout de la valeur du champ a la liste
+    app.generateTask({
+      label : value,
+      done : false,
+    });
+
+    //On vide le champ
+    evt.target.elements.inputValue.value = "";
+  },
+
+  createFrom: function(){
+    console.log ("app :createForm");
+
+  //on crée l'élément un form
+  const form = document.createElement("form");
+  //on définit l'attribut id du form
+  form.id = 'todo-form'; 
+
+  form.addEventListener ("submit",app.addTask);
+
+  //Ajout d'un input text et l'ajouter au form
+  const input = document.createElement("input");
+  input.type = "text";
+  input.id = "todo-input";
+  input.autocomplete = "off";
+  input.name = "inputValue";
   input.placeholder = "Ajouter une tâche";
 
-  //on définit l'attribut id du input
-  input.id = 'input'; 
 
-  //j'ajoute l'input au DOM 
-  container.appendChild(input);
+  //j'ajoute le form a l'input et le form au DOM 
+  form.appendChild(input);
+  app.todo.appendChild(form);
 
-  // LE TEXTE 
-  //Creation du paragraphe
-  texte = document.createElement ("p");
-  //Ajout du texte 
-  texte.textContent = "tâches en cours";
-  //on définit l'attribut id du texte
-  texte.id = 'taches'; 
-  //J'ajoute le texte au DOM
-  container.appendChild(texte);
+  },
+  createCounter: function(){
+    console.log ("app :createCounter");
 
-  //La LIGNE
+    //Ajout d'une div 
+    const counter = document.createElement ("div");
+    counter.id = "todo-counter";
+    //Préparer le contenu 
+    counter.textContent = "2 tâches en cours";
 
-  //Creation du paragraphe
-  ligne = document.createElement ("div");
-  //on définit l'attribut id de la ligne
-  ligne.id = 'ligne'; 
-  //J'ajoute le texte au DOM
-  container.appendChild(ligne);
+    //Ajout du compteur au DOM
+    app.todo.appendChild ( counter);
 
+  },
+  createList: function(){
+    console.log ("app :createList");
 
-  //La liste des tâches
-  //Creation du paragraphe
-  taskBox = document.createElement ("div");
-  //Création du texte 
-  task =document.createElement ("p");
- 
-  //on définit l'attribut id de la boite de taches et du texte
-  taskBox.id = 'task-box'; 
-  task.id = 'task'; 
+    // Création de la liste
+    const list = document.createElement ("ul");
+    list.id = "task-list";
 
+    //Je stocke dans app pour y accèder partout
+    app.list = list;
 
-  //J'ajoute la boite au DOM et le texte a la boite
-  container.appendChild(taskBox);
-  taskBox.appendChild(task);
-
+    // Creation des tâches 
+    app.generateTask({
+      label: "coder une ToDoList en JS",
+      done: true,
+    });
+    app.generateTask({
+      label: "Faire les courses",
+      done: true,
+    });
   
-},
+    // Ajout dans le DOM
+    app.todo.appendChild (list);
+  },
+  generateTask : function (data){
+    //Ajouter une li 
+    const task = document.createElement("li");
+    task.className = "task";
+
+    if(data.done){
+      task.classList.add ( "task-label--done");
+    }
+
+    //Ajout de la checkbox
+    const checkbox = document.createElement ("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = data.done;
+
+    //Ajout du label span
+    const label = document.createElement("span");
+    label.textContent = data.label;
+    label.className = "task-label";
+
+    //Ajout du checkbox et span a la li 
+    task.appendChild(checkbox);
+    task.appendChild(label);
+
+    //Ajout du li a la liste de tâches
+    app.list.appendChild(task);
+  },
+
 };
 
 
 // Chargement du DOM
 document.addEventListener('DOMContentLoaded', app.init);
+    
+
+
+
 
 
 
